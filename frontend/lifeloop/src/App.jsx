@@ -5,7 +5,8 @@ import Navbar from './components/navbar';
 import Sidebar from './components/sidebar';
 import TaskCard from './components/taskcard';
 import AddTodoForm from './components/AddTodoForm';
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import CompletedTask from './components/completed';
 function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [task, settask] = useState([]);
@@ -20,6 +21,10 @@ function App() {
     setIsEditing(!isEditing);
   };
 
+  const handleCancel = () => {
+    setIsEditing(false);
+    setEditingTaskId(null);
+  }
   const handleEditClick = (editingTaskId) => {
     const taskToEdit = task.find((t) => t.id === editingTaskId);
     setEditingTask(taskToEdit);
@@ -44,8 +49,14 @@ function App() {
         task.id === id ? { ...task, ...updatedTask } : task
       )
     );
-    console.log('task updated');
-    console.log(task);
+  };
+  const handleDeleteTask = (id) => {
+    settask((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    if (editingTaskId === id) {
+      setEditingTaskId(null);
+      setIsEditing(false);
+    }
+    handleIsEditing();
   };
 
   const handleAddTask = (todo) => {
@@ -60,12 +71,13 @@ function App() {
   };
 
   return (
-    <>
+    <Router>
       <Navbar />
-      <div className="flex">
-        <Sidebar />
-        <main className="ml-56 mt-16 pt-16 flex-cols justify-start w-full h-full min-h-screen">
-          <h1 className="text-3xl text-left ml-20 font-bold mb-4">Plans</h1>
+      <Sidebar />
+      <Routes>
+        <Route path='/' element = {<div className="flex">
+        <main className="ml-56  mt-16 pt-16 flex-cols justify-start w-full h-full min-h-screen">
+          <h1 className="text-3xl text-left ml-20 font-semibold text-gray-700 mb-4">Plans</h1>
 
           <div className="space-y-4">
             {task
@@ -75,7 +87,7 @@ function App() {
                   key={data.id}
                   data={data}
                   onComplete={handleComplete}
-                  update={handleUpdateTask}
+                  deleteTask={handleDeleteTask}
                   is_editing={data.id === editingTaskId}
                   onEditStart={handleEditStart}
                   onEditStop={handleEditStop}
@@ -90,11 +102,26 @@ function App() {
               <div className="text-gray-500 hover:text-blue-700">Add tasks</div>
             </button>
           ) : (
-            <AddTodoForm onSubmit={handleAddTask} />
+            <AddTodoForm onSubmit={handleAddTask} handleCancel={handleCancel} />
           )}
         </main>
-      </div>
-    </>
+      </div>}
+      />
+      <Route path='/completed' element = {
+          <main className="mt-16 pt-16 flex-cols justify-start  min-h-screen h-full ml-52 ">
+           <h1 className="text-3xl text-left ml-20 font-semibold text-gray-700 mb-4">Completed Tasks</h1>
+           {task.map((data) => (
+             data.status === 'completed' ? (
+               <CompletedTask
+                 key={data.id}
+                 text={data.title}
+               />
+             ) : null
+           ))}
+         </main>
+      }/>
+      </Routes>
+    </Router>
   );
 }
 

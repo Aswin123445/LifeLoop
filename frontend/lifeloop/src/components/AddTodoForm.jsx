@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { CalendarClock,ArrowBigDownDash  } from 'lucide-react';
-const AddTodoForm = ({ onSubmit ,initialData = null ,onEditStop = null}) => { 
+const AddTodoForm = ({ onSubmit ,initialData = null ,onEditStop = null , handleCancel = null}) => { 
+
+  const handleCanceler = () => {
+    handleCancel();
+    setTask('');
+  }
   const [task, setTask] = useState('');
   useEffect(() => {
     if (initialData) {
@@ -47,7 +52,7 @@ const AddTodoForm = ({ onSubmit ,initialData = null ,onEditStop = null}) => {
             </div>
             <div className='ml-2 flex justify-start  mt-4 w-48'>
                 <div >
-                    <div className='bg-gray-200 mt-3 h-8  text-xl w-20 text-red-500 font-semibold hover:bg-gray-300 rounded-md mr-4'>cancel</div>
+                    <button onClick={handleCanceler} className='bg-gray-200 mt-3 h-8  text-xl w-20 text-red-500 font-semibold hover:bg-gray-300 rounded-md mr-4'>cancel</button>
                 </div>
                   <div >
                     <button type='submit' className='bg-gray-200 mt-3 h-8 text-xl w-20 text-blue-500 font-semibold hover:bg-gray-300 rounded-md mr-4'>

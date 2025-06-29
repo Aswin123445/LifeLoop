@@ -8,7 +8,7 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <nav className="bg-white-500 top-0 left-0 shadow-lg fixed w-full z-10">
+    <nav className="bg-white top-0 left-0 shadow-lg fixed w-full z-50">
       <div className="px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="text-3xl font-bold text-blue-600">LifeLoop</div>
