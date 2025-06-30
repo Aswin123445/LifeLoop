@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CalendarClock,ArrowBigDownDash  } from 'lucide-react';
-const AddTodoForm = ({ onSubmit ,initialData = null ,onEditStop = null , handleCancel = null}) => { 
+const AddTodoForm = ({ onSubmit ,initialData = null ,onEditStop = null , handleCancel = null, onComplete = null}) => { 
 
   const handleCanceler = () => {
     handleCancel();
@@ -20,6 +20,7 @@ const AddTodoForm = ({ onSubmit ,initialData = null ,onEditStop = null , handleC
        onEditStop();
     }else{
         onSubmit(task);
+        onComplete();
 
     }
     setTask('');
